@@ -28,10 +28,3 @@ Azure・AWS・PowerShell・Splunk・Taniumを学習し、
 ## GitHub
 
 90日間の成果物をここにまとめる。
-## Progress
-
-- [x] Git installed
-- [x] GitHub repository created
-- [x] First commit
-- [x] First push
-- [x] AWS account created
