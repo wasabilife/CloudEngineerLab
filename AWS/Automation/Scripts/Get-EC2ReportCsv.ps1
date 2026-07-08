@@ -8,16 +8,16 @@
 # パス設定
 # ============================================
 
-# AWS\Automate\Scripts
+# AWS\Automation\Scripts
 $ScriptDirectory = $PSScriptRoot
 
 
-# Scripts → Automate
-$AutomateDirectory = Split-Path $ScriptDirectory -Parent
+# Scripts → Automation
+$AutomationDirectory = Split-Path $ScriptDirectory -Parent
 
 
 # Reports
-$ReportDirectory = Join-Path $AutomateDirectory "Reports"
+$ReportDirectory = Join-Path $AutomationDirectory "Reports"
 
 
 # Reports\EC2
@@ -25,7 +25,7 @@ $EC2ReportDirectory = Join-Path $ReportDirectory "EC2"
 
 
 # ExecutionLogs
-$ExecutionLogDirectory = Join-Path $AutomateDirectory "ExecutionLogs"
+$ExecutionLogDirectory = Join-Path $AutomationDirectory "ExecutionLogs"
 
 
 
@@ -62,6 +62,7 @@ $ExecutionLogFile = Join-Path `
 Add-Content `
     $ExecutionLogFile `
     ""
+
 
 Add-Content `
     $ExecutionLogFile `
@@ -156,13 +157,12 @@ try {
 
 
     # ========================================
-    # CSV出力
+    # EC2全一覧 CSV作成
     # ========================================
 
     $ReportPath = Join-Path `
         $EC2ReportDirectory `
         "EC2Report.csv"
-
 
 
     $result |
@@ -178,10 +178,45 @@ try {
         "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') CSV作成成功"
 
 
-
     Add-Content `
         $ExecutionLogFile `
         "保存先: $ReportPath"
+
+
+
+    # ========================================
+    # 停止中EC2抽出
+    # ========================================
+
+    $StoppedEC2 = $result |
+        Where-Object {
+            $_.State -eq "stopped"
+        }
+
+
+
+    $StoppedReportPath = Join-Path `
+        $EC2ReportDirectory `
+        "StoppedEC2Report.csv"
+
+
+
+    $StoppedEC2 |
+        Export-Csv `
+            -Path $StoppedReportPath `
+            -NoTypeInformation `
+            -Encoding UTF8
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') 停止中EC2レポート作成成功"
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "保存先: $StoppedReportPath"
 
 
 
@@ -193,14 +228,17 @@ try {
 
 
 
-    # S3保存用日時
     $UploadDate = Get-Date -Format "yyyy/MM/dd"
+
+
+
+    # ----------------------------------------
+    # EC2全一覧アップロード
+    # ----------------------------------------
 
     $FileDate = Get-Date -Format "yyyyMMdd_HHmmss"
 
 
-
-    # S3キー
     $S3Key = "EC2/$UploadDate/EC2Report_$FileDate.csv"
 
 
@@ -213,20 +251,57 @@ try {
 
     if ($LASTEXITCODE -ne 0) {
 
-        throw "S3アップロードに失敗しました"
+        throw "EC2レポートS3アップロードに失敗しました"
     }
 
 
 
     Add-Content `
         $ExecutionLogFile `
-        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') S3アップロード成功"
+        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') EC2レポートS3アップロード成功"
 
 
 
     Add-Content `
         $ExecutionLogFile `
         "保存先: s3://$BucketName/$S3Key"
+
+
+
+    # ----------------------------------------
+    # 停止中EC2アップロード
+    # ----------------------------------------
+
+    $StoppedFileDate = Get-Date -Format "yyyyMMdd_HHmmss"
+
+
+    $StoppedS3Key = `
+        "EC2/$UploadDate/StoppedEC2Report_$StoppedFileDate.csv"
+
+
+
+    aws s3 cp `
+        $StoppedReportPath `
+        "s3://$BucketName/$StoppedS3Key"
+
+
+
+    if ($LASTEXITCODE -ne 0) {
+
+        throw "停止中EC2レポートS3アップロードに失敗しました"
+    }
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') 停止中EC2 S3アップロード成功"
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "保存先: s3://$BucketName/$StoppedS3Key"
 
 
 
@@ -239,11 +314,15 @@ try {
     Write-Host "EC2レポート作成完了"
     Write-Host "================================"
     Write-Host ""
-    Write-Host "ローカル:"
+
+    Write-Host "CSV:"
     Write-Host $ReportPath
+
     Write-Host ""
+
     Write-Host "S3:"
     Write-Host "s3://$BucketName/$S3Key"
+
 
 
 
@@ -254,6 +333,7 @@ try {
     Add-Content `
         $ExecutionLogFile `
         "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') 正常終了"
+
 
 }
 
