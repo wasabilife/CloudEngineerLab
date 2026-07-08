@@ -1,6 +1,6 @@
 # ============================================
 # Get-EC2ReportCsv.ps1
-# EC2情報取得・CSV出力スクリプト
+# EC2情報取得・CSV出力・S3アップロード
 # ============================================
 
 
@@ -8,26 +8,23 @@
 # パス設定
 # ============================================
 
-# スクリプトの場所
 # AWS\Automate\Scripts
 $ScriptDirectory = $PSScriptRoot
 
 
-# Automateフォルダ取得
 # Scripts → Automate
 $AutomateDirectory = Split-Path $ScriptDirectory -Parent
 
 
-# Reportsフォルダ
+# Reports
 $ReportDirectory = Join-Path $AutomateDirectory "Reports"
 
 
-# EC2レポートフォルダ
-# 実行時に自動作成
+# Reports\EC2
 $EC2ReportDirectory = Join-Path $ReportDirectory "EC2"
 
 
-# ExecutionLogsフォルダ
+# ExecutionLogs
 $ExecutionLogDirectory = Join-Path $AutomateDirectory "ExecutionLogs"
 
 
@@ -84,7 +81,21 @@ try {
 
     if ($LASTEXITCODE -ne 0) {
 
-        throw "AWS CLIが利用できません"
+        throw "AWS CLIがインストールされていません"
+    }
+
+
+
+    # ========================================
+    # AWS認証確認
+    # ========================================
+
+    aws sts get-caller-identity | Out-Null
+
+
+    if ($LASTEXITCODE -ne 0) {
+
+        throw "AWS認証に失敗しました"
     }
 
 
@@ -162,10 +173,77 @@ try {
 
 
 
+    Add-Content `
+        $ExecutionLogFile `
+        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') CSV作成成功"
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "保存先: $ReportPath"
+
+
+
+    # ========================================
+    # S3アップロード
+    # ========================================
+
+    $BucketName = "cloud-engineer-lab-wasabi-520819077064-ap-northeast-3-an"
+
+
+
+    # S3保存用日時
+    $UploadDate = Get-Date -Format "yyyy/MM/dd"
+
+    $FileDate = Get-Date -Format "yyyyMMdd_HHmmss"
+
+
+
+    # S3キー
+    $S3Key = "EC2/$UploadDate/EC2Report_$FileDate.csv"
+
+
+
+    aws s3 cp `
+        $ReportPath `
+        "s3://$BucketName/$S3Key"
+
+
+
+    if ($LASTEXITCODE -ne 0) {
+
+        throw "S3アップロードに失敗しました"
+    }
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') S3アップロード成功"
+
+
+
+    Add-Content `
+        $ExecutionLogFile `
+        "保存先: s3://$BucketName/$S3Key"
+
+
+
+    # ========================================
+    # 完了表示
+    # ========================================
+
     Write-Host ""
-    Write-Host "CSVを作成しました。"
-    Write-Host "保存先:"
+    Write-Host "================================"
+    Write-Host "EC2レポート作成完了"
+    Write-Host "================================"
+    Write-Host ""
+    Write-Host "ローカル:"
     Write-Host $ReportPath
+    Write-Host ""
+    Write-Host "S3:"
+    Write-Host "s3://$BucketName/$S3Key"
 
 
 
@@ -177,13 +255,6 @@ try {
         $ExecutionLogFile `
         "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') 正常終了"
 
-
-    Add-Content `
-        $ExecutionLogFile `
-        "出力ファイル: $ReportPath"
-
-
-
 }
 
 
@@ -192,12 +263,13 @@ catch {
 
 
     # ========================================
-    # エラーログ
+    # エラー処理
     # ========================================
 
     Add-Content `
         $ExecutionLogFile `
         "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') エラー発生"
+
 
 
     Add-Content `
@@ -207,7 +279,7 @@ catch {
 
 
     Write-Host ""
-    Write-Host "エラーが発生しました。"
+    Write-Host "エラーが発生しました"
     Write-Host $_.Exception.Message
 
 }
