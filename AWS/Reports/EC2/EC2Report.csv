@@ -1,0 +1,2 @@
+"Name","InstanceId","State","InstanceType","PublicIP"
+"WebServer01","i-0f77abff8843b954e","running","t3.micro","56.155.39.170"
