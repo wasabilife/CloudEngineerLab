@@ -93,3 +93,20 @@ aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId,Sta
 - CLIからEC2の起動・停止ができる。
 - 状態確認は `describe-instances` で行える。
 - GUIを開かなくてもサーバー運用が可能。
+## EC2タグ管理
+
+### タグ確認
+
+aws ec2 describe-tags --filters "Name=resource-id,Values=<InstanceId>" --output table
+
+### Nameタグ作成
+
+aws ec2 create-tags --resources <InstanceId> --tags Key=Name,Value=WebServer01
+
+### 学んだこと
+
+EC2はタグで管理する。
+
+InstanceIdではなくNameタグで運用することが多い。
+
+AWS CLIからタグの作成・確認ができる。
