@@ -99,6 +99,20 @@ resource "aws_instance" "web_server" {
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
   associate_public_ip_address = true
   key_name                    = "cloud-lab-key"
+  user_data                   = <<-EOF
+#!/bin/bash
+
+dnf update -y
+
+dnf install -y httpd
+
+systemctl enable httpd
+
+systemctl start httpd
+
+echo "<h1>Cloud Engineer Lab</h1>" > /var/www/html/index.html
+
+EOF
 
   tags = {
     Name = "terraform-web-server"
