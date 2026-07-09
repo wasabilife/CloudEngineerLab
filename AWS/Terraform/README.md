@@ -183,3 +183,41 @@ User Dataが初回起動時に自動実行された
 学んだこと
 
 User DataはEC2の初回起動時のみ実行されるため、既存インスタンスへ追加しただけでは実行されない。設定を反映させるには、EC2の再作成や適切な運用方法を選択する必要がある。
+# EC2 Web Server
+
+## Purpose
+
+TerraformでEC2を構築し、
+User Dataを利用してApacheを自動構築した。
+
+## Why User Data?
+
+手動構築ではなく
+
+Infrastructure as Code
+
+として
+
+サーバーが何台増えても同じ構成になるようにした。
+
+## Verification
+
+- Terraform Apply 成功
+- EC2作成成功
+- SSH接続成功
+- Apache起動確認
+- cloud-initログ確認
+- ブラウザ表示確認
+
+## Troubleshooting
+
+### SSH
+
+秘密鍵の保存場所を指定する必要があった。
+ssh -i C:\Users\user\Downloads\cloud-lab-key.pem ec2-user@PublicIP
+
+
+### User Data
+
+cloud-init-output.logで正常実行を確認した。
+![alt text](image.png)
