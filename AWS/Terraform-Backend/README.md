@@ -105,3 +105,15 @@ Local terraform.tfstate was migrated to the S3 Remote Backend.
 - Prevents concurrent updates
 - Team collaboration
 - State versioning
+Project Summary
+Terraform Remote Backendを構築
+Amazon S3へStateを移行
+DynamoDBでState Lockを実装
+Troubleshooting
+.terraform を誤ってコミットした原因と対策
+Backend設定前にDynamoDBが存在せず発生したエラー
+terraform init -migrate-state によるState移行
+Lessons Learned
+Backendはブートストラップ手順で構築する
+.terraform と terraform.tfstate は通常Git管理しない
+Gitのstatus確認を徹底する重要性
