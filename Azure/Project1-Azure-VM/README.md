@@ -175,3 +175,44 @@ az network public-ip show `
 - VMへ後から関連付けることができる
 - Standard SKUが実務では推奨される
 - Staticを利用することでIPアドレスを固定できる
+# Step5 Network Interface
+
+## 目的
+
+Virtual Machineがネットワークへ接続できるよう、Network Interface（NIC）を作成した。
+
+## 作成したリソース
+
+|項目|値|
+|---|---|
+|NIC|nic-vm-web-001|
+|Subnet|subnet-web-001|
+|Public IP|pip-vm-web-001|
+
+## 実行コマンド
+
+```powershell
+az network nic create `
+  --resource-group rg-cloudlab-dev-001 `
+  --name nic-vm-web-001 `
+  --vnet-name vnet-cloudlab-dev-001 `
+  --subnet subnet-web-001 `
+  --public-ip-address pip-vm-web-001
+```
+
+## 確認コマンド
+
+```powershell
+az network nic list --output table
+
+az network nic show `
+  --resource-group rg-cloudlab-dev-001 `
+  --name nic-vm-web-001
+```
+
+## 学んだこと
+
+- NICはAzureの仮想ネットワークカードである
+- Public IPはNICへ関連付ける
+- VMはNICを経由してネットワークへ接続する
+- AzureではNICも独立したリソースとして管理される
