@@ -70,3 +70,21 @@ az group show --name rg-cloudlab-dev-001
 - Azure CLIはAzure Resource Manager (ARM)と通信している
 - `list` は一覧取得、`show` は1つのリソースの詳細取得に使用する
 - `--output table` は人が見やすく、JSONは自動化に向いている
+## Step6 Azure CLIでResource Group作成
+
+### 実施内容
+
+- Azure CLIでResource Groupを新規作成
+- 作成後に一覧で確認
+
+### 使用コマンド
+
+```powershell
+az group create --name rg-cloudlab-test-001 --location japaneast
+az group list --output table
+```
+
+### 学んだこと
+
+- Azure CLIからResource Groupを作成できる
+- 実務では検証用(Resource Group)で試してから本番へ反映する
