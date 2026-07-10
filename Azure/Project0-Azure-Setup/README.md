@@ -88,3 +88,32 @@ az group list --output table
 
 - Azure CLIからResource Groupを作成できる
 - 実務では検証用(Resource Group)で試してから本番へ反映する
+## Step6 Azure CLIによるResource Group管理
+
+### 実施内容
+
+- Resource Group作成
+- タグ追加
+- Resource Group削除
+
+### 使用コマンド
+
+```powershell
+az group create --name rg-cloudlab-test-001 --location japaneast
+
+az group update --name rg-cloudlab-test-001 --set tags.Environment=Development tags.Project=CloudEngineerLab tags.Owner=Masayoshi
+
+az group delete --name rg-cloudlab-test-001 --yes --no-wait
+```
+
+### 学んだこと
+
+- タグはコスト管理・検索・運用管理に利用される
+- 実務ではOwnerは個人名よりチーム名を使うことが多い
+- Resource Group削除時は配下のリソースも削除されるため注意が必要
+### 実務での注意点
+
+- Resource Groupを削除すると、配下のリソースも削除される。
+- 削除前に `az group show` で対象を確認する。
+- 本番環境では削除前にレビューや承認を行う運用が一般的。
+- タグを適切に設定することで、コスト管理やリソース検索が容易になる。
