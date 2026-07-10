@@ -216,3 +216,33 @@ az network nic show `
 - Public IPはNICへ関連付ける
 - VMはNICを経由してネットワークへ接続する
 - AzureではNICも独立したリソースとして管理される
+## Step6 Create Virtual Machine
+
+### VM
+- Name
+  - vm-web-001
+
+### Image
+- Ubuntu 24.04 LTS
+
+### Size
+- Standard_B2als_v2
+
+### Authentication
+- SSH Public Key
+
+### Username
+- azureuser
+
+### NIC
+- nic-vm-web-001
+
+### Public IP
+- 20.63.160.156
+
+### Verification
+
+Created VM
+
+```powershell
+az vm list --output table
