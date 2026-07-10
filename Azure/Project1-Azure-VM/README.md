@@ -134,3 +134,44 @@ az network vnet subnet update `
 - NSGはSubnetまたはNICに関連付けられる
 - 今回はSubnet単位で適用し、管理しやすい構成とした
 - 通信ルールは最小権限の原則で設定する
+# Step4 Public IP
+
+## 目的
+
+Virtual Machineへインターネット経由で接続するため、Public IPを作成した。
+
+## 作成したリソース
+
+|項目|値|
+|---|---|
+|Public IP|pip-vm-web-001|
+|SKU|Standard|
+|Allocation|Static|
+
+## 実行コマンド
+
+```powershell
+az network public-ip create `
+  --resource-group rg-cloudlab-dev-001 `
+  --name pip-vm-web-001 `
+  --sku Standard `
+  --allocation-method Static `
+  --location japaneast
+```
+
+## 確認コマンド
+
+```powershell
+az network public-ip list --output table
+
+az network public-ip show `
+  --resource-group rg-cloudlab-dev-001 `
+  --name pip-vm-web-001
+```
+
+## 学んだこと
+
+- Public IPはAzureでは独立したリソースである
+- VMへ後から関連付けることができる
+- Standard SKUが実務では推奨される
+- Staticを利用することでIPアドレスを固定できる
