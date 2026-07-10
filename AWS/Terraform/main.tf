@@ -10,7 +10,7 @@ data "aws_ami" "amazon_linux" {
 }
 resource "aws_vpc" "main" {
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr
 
   enable_dns_support = true
 
@@ -23,7 +23,7 @@ resource "aws_vpc" "main" {
 }
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = var.public_subnet_cidr
   availability_zone       = "ap-northeast-3a"
   map_public_ip_on_launch = true
 
@@ -94,7 +94,7 @@ resource "aws_security_group" "web_sg" {
 }
 resource "aws_instance" "web_server" {
   ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.micro"
+  instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public_subnet.id
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
   associate_public_ip_address = true

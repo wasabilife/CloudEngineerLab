@@ -437,3 +437,61 @@ Terraformではresource定義名が参照名になる。
 - Linux
 - Apache
 - Troubleshooting
+## Terraform Variables
+
+### Overview
+
+Terraform Variablesを利用して、
+インフラ設定値とTerraformコードを分離した。
+
+
+### Before
+
+main.tf内に直接値を記載。
+
+例:
+
+instance_type = "t3.micro"
+
+
+### After
+
+main.tfでは変数を参照。
+
+例:
+
+instance_type = var.instance_type
+
+
+設定値はterraform.tfvarsで管理。
+
+
+### Variable Files
+
+| File | Role |
+|---|---|
+| variables.tf | Variable定義 |
+| terraform.tfvars | Environment values |
+
+
+### Benefits
+
+- 環境ごとの設定変更が容易
+- Terraformコードの再利用性向上
+- Dev/Staging/Production環境へ展開可能
+
+
+### Verification
+
+確認コマンド:
+
+terraform fmt
+
+terraform validate
+
+terraform plan
+
+結果:
+
+Infrastructure changes:
+0
