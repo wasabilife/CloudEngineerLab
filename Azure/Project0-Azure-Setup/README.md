@@ -117,3 +117,34 @@ az group delete --name rg-cloudlab-test-001 --yes --no-wait
 - 削除前に `az group show` で対象を確認する。
 - 本番環境では削除前にレビューや承認を行う運用が一般的。
 - タグを適切に設定することで、コスト管理やリソース検索が容易になる。
+## Azure PowerShell
+
+### 発生したトラブル
+
+Import-Module Az.Accounts 実行時に
+Accounts.format.ps1xml の読み込みでエラー。
+
+### 原因
+
+Windows PowerShell 5.1 環境において、
+OneDrive 配下のモジュール書式ファイルが
+Windows のソフトウェア制限ポリシーにより
+ブロックされた。
+
+### 調査
+
+- Get-ExecutionPolicy
+- Set-ExecutionPolicy RemoteSigned
+- Unblock-File
+- Import-Module -Verbose
+
+### 解決
+
+Azure CLI を利用して学習を継続。
+
+PowerShell は PowerShell 7 環境で再検証予定。
+
+### 学んだこと
+
+実務では環境依存の問題に時間をかけ過ぎず、
+代替手段（Azure CLI）を利用する判断も重要。
