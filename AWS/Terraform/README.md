@@ -274,3 +274,166 @@ terraform apply -replaceでEC2再作成。
 - EC2
 - Security Group
 - Infrastructure as Code
+## Terraform Output
+
+Terraform Outputを利用して、
+構築したAWSリソース情報を取得できるようにした。
+
+取得情報:
+
+- EC2 Instance ID
+- EC2 Public IP
+- VPC ID
+
+
+## Troubleshooting
+
+### terraform outputで値が表示されない
+
+原因:
+
+outputs.tf追加後、terraform applyを実行していなかった。
+
+
+### Resource参照エラー
+
+原因:
+
+outputs.tfで存在しないResource名を指定。
+
+修正:
+
+aws_instance.web
+
+↓
+
+aws_instance.web_server
+
+# Terraform AWS Environment Automation
+
+## Project Overview
+
+Terraformを利用してAWS環境をコード管理し、
+VPCからEC2 Web Serverまで自動構築する。
+
+## Architecture
+
+構成:
+
+VPC
+ └ Public Subnet
+    └ EC2
+       └ Apache Web Server
+
+
+## Created AWS Resources
+
+- VPC
+- Public Subnet
+- Internet Gateway
+- Route Table
+- Security Group
+- EC2 Instance
+
+
+## EC2 Configuration
+
+AMI:
+
+Amazon Linux 2023
+
+
+Instance Type:
+
+t3.micro
+
+
+Application:
+
+Apache HTTP Server
+
+
+## Automation
+
+EC2 User Dataを利用し、
+インスタンス起動時にApacheを自動インストール。
+
+処理内容:
+
+1. OS Update
+2. Apache Install
+3. Apache Enable
+4. Apache Start
+5. index.html作成
+
+
+## Terraform Output
+
+以下の情報をOutputとして取得可能。
+
+- EC2 Instance ID
+- EC2 Public IP
+- VPC ID
+
+
+## Troubleshooting
+
+
+### terraform outputが表示されない
+
+原因:
+
+outputs.tf追加後にterraform applyを実行していなかった。
+
+
+対応:
+
+terraform plan
+
+terraform apply
+
+を実行してTerraform Stateへ反映。
+
+
+---
+
+
+### Reference to undeclared resource
+
+原因:
+
+outputs.tfで存在しないResource名を参照。
+
+
+誤:
+
+aws_instance.web
+
+
+正:
+
+aws_instance.web_server
+
+
+Terraformではresource定義名が参照名になる。
+
+
+## Verification
+
+確認項目:
+
+- SSH接続成功
+- Apache稼働確認
+- Browser HTTPアクセス成功
+
+
+## Skills
+
+- AWS VPC
+- AWS EC2
+- Security Group
+- Terraform
+- Infrastructure as Code
+- Linux
+- Apache
+- Troubleshooting
