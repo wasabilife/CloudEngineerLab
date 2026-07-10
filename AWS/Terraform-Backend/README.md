@@ -51,3 +51,19 @@ Terraform StateをローカルPCではなくAWS S3で管理するための基盤
 - チーム開発でStateを共有するため
 - Stateファイルのバックアップを保持するため
 - Stateファイルを暗号化して保護するため
+### Troubleshooting
+
+#### Issue
+GitHub rejected the push because the `.terraform` directory contained the AWS provider executable (over 100 MB).
+
+#### Cause
+The `Terraform-Backend` project did not have a `.gitignore`, so the `.terraform` directory was accidentally committed.
+
+#### Resolution
+- Added a `.gitignore`
+- Excluded `.terraform` and `*.tfstate`
+- Removed the files from Git tracking
+- Recreated the commit without the provider binaries
+
+#### Lesson Learned
+Always create `.gitignore` before running `terraform init` in a new Terraform project.
