@@ -67,3 +67,41 @@ The `Terraform-Backend` project did not have a `.gitignore`, so the `.terraform`
 
 #### Lesson Learned
 Always create `.gitignore` before running `terraform init` in a new Terraform project.
+## DynamoDB State Lock
+
+### Purpose
+
+Prevent multiple users from modifying the Terraform State at the same time.
+
+### Why?
+
+When multiple engineers execute `terraform apply` simultaneously, the Terraform State may become inconsistent.
+
+DynamoDB provides a locking mechanism to ensure only one operation updates the State at a time.
+## Remote Backend Migration
+
+### Purpose
+
+Store Terraform State in Amazon S3 instead of the local machine.
+
+### Components
+
+- Amazon S3
+- DynamoDB State Lock
+
+### Migration
+
+Executed:
+
+terraform init -migrate-state
+
+Result:
+
+Local terraform.tfstate was migrated to the S3 Remote Backend.
+
+### Benefits
+
+- Shared Terraform State
+- Prevents concurrent updates
+- Team collaboration
+- State versioning

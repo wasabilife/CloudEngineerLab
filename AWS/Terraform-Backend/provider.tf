@@ -15,3 +15,12 @@ provider "aws" {
   region = "ap-northeast-3"
 
 }
+terraform {
+  backend "s3" {
+    bucket         = "cloud-engineer-lab-terraform-state-001"
+    key            = "terraform.tfstate"
+    region         = "ap-northeast-3"
+    dynamodb_table = "terraform-state-lock"
+    encrypt        = true
+  }
+}
