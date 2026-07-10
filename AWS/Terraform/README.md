@@ -221,3 +221,56 @@ ssh -i C:\Users\user\Downloads\cloud-lab-key.pem ec2-user@PublicIP
 
 cloud-init-output.logで正常実行を確認した。
 ![alt text](image.png)
+# Terraform AWS Environment Automation
+
+## Overview
+
+Terraformを利用してAWS VPC及びEC2環境を自動構築する。
+
+
+## Architecture
+
+VPC
+ |
+ Public Subnet
+ |
+ EC2
+ |
+ Apache Web Server
+
+
+## Created Resources
+
+- VPC
+- Subnet
+- Internet Gateway
+- Route Table
+- Security Group
+- EC2
+- Apache
+
+
+## Automation
+
+EC2 User Dataを利用し、
+インスタンス起動時にApacheを自動インストール。
+
+
+## Troubleshooting
+
+### User Dataが再実行されない
+
+原因:
+User Dataは初回起動時のみ実行。
+
+対応:
+terraform apply -replaceでEC2再作成。
+
+
+## Skills
+
+- Terraform
+- AWS VPC
+- EC2
+- Security Group
+- Infrastructure as Code
