@@ -246,3 +246,127 @@ Created VM
 
 ```powershell
 az vm list --output table
+## Step7 SSH Login
+
+### SSH Connection
+
+```powershell
+ssh -i $HOME\.ssh\azure-cloudlab azureuser@20.63.160.156
+```
+
+### Verification
+
+#### Hostname
+
+```bash
+hostname
+```
+
+Result
+
+```
+vm-web-001
+```
+
+---
+
+#### Current User
+
+```bash
+whoami
+```
+
+Result
+
+```
+azureuser
+```
+
+---
+
+#### Current Directory
+
+```bash
+pwd
+```
+
+Result
+
+```
+/home/azureuser
+```
+
+---
+
+#### OS Version
+
+```bash
+cat /etc/os-release
+```
+
+Result
+
+- Ubuntu 24.04.4 LTS
+
+---
+
+#### CPU
+
+```bash
+lscpu
+```
+
+Result
+
+- AMD EPYC 7763
+- 2 vCPU
+
+---
+
+#### Memory
+
+```bash
+free -h
+```
+
+Result
+
+- Total Memory : 3.8GiB
+
+---
+
+#### Disk
+
+```bash
+df -h
+```
+
+Result
+
+- OS Disk : 29GB
+
+---
+
+#### Azure Metadata Service
+
+```bash
+curl -H Metadata:true \
+"http://169.254.169.254/metadata/instance?api-version=2021-02-01"
+```
+
+Verified
+
+- Resource Group
+- VM Name
+- Subscription
+- Image
+- VM Size
+- Region
+- Network Information
+
+### Learning
+
+- SSH Public Key Authentication
+- Linux Basic Commands
+- Azure Metadata Service
+- Azure VM Initial Verification
