@@ -407,3 +407,22 @@ Verified
 - systemctl
 - Nginx Installation
 - Web Server Verification
+## Step9 Network Security Group
+
+### 作成内容
+- HTTP(80) Inbound Rule追加
+- Priority:1001
+- TCP
+- Allow
+
+### 確認内容
+- NSG Rule確認
+- ブラウザからNginx表示成功
+- curlでHTTP応答確認
+
+### 学習内容
+AzureではVMへPublic IPを付けても、
+NSGで許可しなければ通信できない。
+
+NSGはAzureの仮想ファイアウォールであり、
+Inbound/Outbound通信を制御する。
