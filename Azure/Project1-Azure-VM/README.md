@@ -83,3 +83,54 @@ az network vnet subnet show `
 - VNetは複数Subnetに分割できる
 - Subnetを役割ごとに分けることでセキュリティと運用性が向上する
 - CIDR設計は将来の拡張を考慮して行う
+# Step3 Network Security Group
+
+## 目的
+
+Virtual Machineへの通信を制御するため、Network Security Group（NSG）を作成し、Subnetへ関連付けた。
+
+## 作成したリソース
+
+|項目|値|
+|---|---|
+|NSG|nsg-web-001|
+|Subnet|subnet-web-001|
+
+## 実行コマンド
+
+```powershell
+az network nsg create `
+  --resource-group rg-cloudlab-dev-001 `
+  --name nsg-web-001 `
+  --location japaneast
+```
+
+```powershell
+az network nsg rule create `
+  --resource-group rg-cloudlab-dev-001 `
+  --nsg-name nsg-web-001 `
+  --name Allow-SSH `
+  --priority 1000 `
+  --direction Inbound `
+  --access Allow `
+  --protocol Tcp `
+  --destination-port-ranges 22 `
+  --source-address-prefixes Internet `
+  --source-port-ranges "*"
+```
+
+```powershell
+az network vnet subnet update `
+  --resource-group rg-cloudlab-dev-001 `
+  --vnet-name vnet-cloudlab-dev-001 `
+  --name subnet-web-001 `
+  --network-security-group nsg-web-001
+```
+
+## 学んだこと
+
+- NSGはAzureの仮想ファイアウォールである
+- AWS Security Groupに相当する
+- NSGはSubnetまたはNICに関連付けられる
+- 今回はSubnet単位で適用し、管理しやすい構成とした
+- 通信ルールは最小権限の原則で設定する
