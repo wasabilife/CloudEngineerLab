@@ -1,0 +1,22 @@
+# Terraform
+.terraform/
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Variable files (秘密情報が入る可能性がある)
+*.tfvars
+
+# Crash logs
+crash.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration
+.terraformrc
+terraform.rc
