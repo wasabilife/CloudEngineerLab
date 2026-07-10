@@ -370,3 +370,40 @@ Verified
 - Linux Basic Commands
 - Azure Metadata Service
 - Azure VM Initial Verification
+## Step8 Install Nginx
+
+### Update Packages
+
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+### Install Nginx
+
+```bash
+sudo apt install nginx -y
+```
+
+### Verification
+
+```bash
+systemctl status nginx
+systemctl is-enabled nginx
+nginx -v
+curl localhost
+```
+
+Verified
+
+- Nginx Installed
+- Service Running
+- Auto Start Enabled
+- Local Web Page Displayed
+
+### Learning
+
+- Linux Package Management
+- systemctl
+- Nginx Installation
+- Web Server Verification
