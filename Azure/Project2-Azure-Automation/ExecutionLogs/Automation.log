@@ -1,0 +1,5 @@
+[2026-08-10 09:34:38] Azure VM report started.
+[2026-08-10 09:34:40] Azure CLI check: OK
+[2026-08-10 09:34:41] Azure subscription: Azure subscription 1
+[2026-08-10 09:34:50] Report exported: C:\Users\user\CloudEngineerLab\Azure\Project2-Azure-Automation\Reports\AzureVMReport.csv
+[2026-08-10 09:34:50] Azure VM report completed successfully.

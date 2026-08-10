@@ -1,0 +1,2 @@
+"Name","ResourceGroup","Location","VMSize","PowerState","PrivateIP","PublicIP"
+"vm-web-001","RG-CLOUDLAB-DEV-001","japaneast","Standard_B2als_v2","VM stopped","10.10.1.4","20.63.160.156"
